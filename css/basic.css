@@ -160,7 +160,7 @@ canvas {
 	background: url('../pics/blue.png') center repeat;
 }
 .category {
-	padding: 0 10px;
+	padding: 3px 10px;
 }
 .category-select {
 	width: 40%;
