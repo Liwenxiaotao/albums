@@ -96,7 +96,7 @@ body, html{
 	opacity: 0.4;
 }
 .left {
-	left: 10x;
+	left: 10px;
 	background: url('../icon/left.png') center no-repeat;
 	background-size: contain;
 }
