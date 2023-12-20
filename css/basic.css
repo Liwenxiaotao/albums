@@ -114,6 +114,9 @@ body, html{
 	font-size: 18px;
 	text-shadow: 0 0 2px #eee;
 	font-weight: 600;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .header {
@@ -139,7 +142,7 @@ body, html{
 .pages-wrap {
 	height: 30px;
 	line-height: 30px;
-	color: #666;
+	color: #333;
 }
 .pages-content {
 	display: inline-block;
