@@ -25,6 +25,9 @@ body, html{
 	width:100%;
 	margin: auto;
 }
+.flipbook {
+	border: 1px solid #fff;
+}
 .container-content {
 	display: flex;
 	justify-content: center;
