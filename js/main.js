@@ -83,11 +83,4 @@ function loadApp() {
 }
 
 // Load the HTML4 version if there's not CSS transform
-
-yepnope({
-	test : Modernizr.csstransforms,
-	yep: ['./js/turn.js'],
-	nope: ['./js/turn.html4.min.js'],
-	both: ['./css/basic.css'],
-	complete: loadApp
-});
+loadApp()
