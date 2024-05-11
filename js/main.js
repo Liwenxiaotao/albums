@@ -1,86 +1,80 @@
-// 数据拼接
-// 相册模板
-var template = ''
-// 下拉选项
-var options = ''
+
 // 所有商品
-var allGoods = []
+const allGoods = []
 // 计算商品个数
-var count = 0
-// dom填充
-for (var i=0; i<data.length; i++ ) {
-	var item = data[i]
-	var option = '<option value=' + i +'>' + item.category + '</option>'
-	options+= option
-	for(var j=0; j<item.goods.length; j++) {
-		var flipbookItem = '<div class="flipbook-item" style="background-image:url(pages/'+ item.goods[j].image[0] +')"></div>'
-		template+= flipbookItem
+let count = 0
+// 数据处理
+for (let i=0; i<data.length; i++ ) {
+	let item = data[i]
+	for(let j=0; j<item.goods.length; j++) {
 		count ++
 		item.goods[j].page = count
 		item.goods[j].categoryValue = '' + i
 		allGoods.push(item.goods[j])
 	}
 }
-console.log(allGoods)
-$('.category-select').html($(options))
-$('.flipbook').html($(template))
 
-// 初始化数据
-$('.goods-title').text(allGoods[0].title)
-$('.category-select').val('0')
 
-// 初始化函数
-function loadApp() {
-	// Create the flipbook
-	var width = document.documentElement.clientWidth - 20
-	var height = width * 1.3
-	var pages = allGoods.length
-    var currentPage = 1
-	$('.pages').text(pages)
-	var flipbook = $('.flipbook').turn({
-			width:width,
-			height:height,
-			elevation: 50,
-			gradients: true,
-			autoCenter: true,
-			display: 'single',
-			pages: pages,
-			when: {
-				turning: function(event,page,view) {
-					$('.count').text(page)
-                    currentPage = page
-                    $('.goods-title').text(allGoods[page - 1].title)
-					if ($('.category-select').val() !== allGoods[page - 1].categoryValue) {
-						$('.category-select').val(allGoods[page - 1].categoryValue)
-					}			
-				}
-			}
-
-	})
-	// setInterval(function() {
-	// 	flipbook.turn('next')
-	// }, 1000)
-	$('.left').on('click', function() {
-		flipbook.turn('previous')
-	})
-	$('.right').on('click', function() {
-		flipbook.turn('next')
-	})
-	$('.previous').on('click', function() {
-		flipbook.turn('page', 1)
-	})
-	$('.next').on('click', function() {
-		flipbook.turn('page', pages)
-	})
-    $('.goods-title').on('click', function() {
-        console.log('跳转详情' + currentPage)
-    })
-
-	$('.category-select').on('change', function(e) {
-		var value = parseInt($('.category-select').val())
-		flipbook.turn('page', data[value].goods[0].page)
-	})
-}
-
-// Load the HTML4 version if there's not CSS transform
-loadApp()
+// 初始化vue
+const app = new Vue({
+    el: '#app',
+    data() {
+        return {
+           data: data, // 放置在data.js中
+           allGoods: allGoods,
+           selectCatagory: '0',
+           pages: allGoods.length,
+           currentPage: 1,
+           goodsTitle: allGoods[0].title
+        }
+    },
+    mounted() {
+        // 初始化相册
+        this.initFlipbook()
+    },
+    methods: {
+        initFlipbook() {
+            const width = document.documentElement.clientWidth - 20
+            const height = width * 1.3
+            const vm = this
+            this.flipbook = $('.flipbook').turn({
+                width:width,
+                height:height,
+                elevation: 50,
+                gradients: true,
+                autoCenter: true,
+                display: 'single',
+                pages: vm.pages,
+                when: {
+                    turning: function(event,page,view) {
+                        vm.currentPage = page
+                        vm.goodsTitle = allGoods[page - 1].title
+                        if (vm.selectCatagory !== allGoods[page - 1].categoryValue) {
+                            vm.selectCatagory = allGoods[page - 1].categoryValue
+                        }			
+                    }
+                }
+    
+            })
+        },
+        previous() {
+            this.flipbook.turn('previous')
+        },
+        next() {
+            this.flipbook.turn('next')
+        },
+        turnFirst() {
+            this.flipbook.turn('page', 1)
+        },
+        turnLast() {
+            this.flipbook.turn('page', this.pages)
+        },
+        goDetail() {
+            console.log('跳转详情' + this.currentPage)
+        },
+        cataChange() {
+            const value = parseInt(this.selectCatagory)
+		    this.flipbook.turn('page', data[value].goods[0].page)
+        }
+    }
+})

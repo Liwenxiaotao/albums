@@ -9,36 +9,43 @@
 	<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0">
 	<link rel="stylesheet" href="./css/basic.css" type="text/css" />
 	<script type="text/javascript" src="./extras/jquery.min.1.7.js"></script>
-	<script type="text/javascript" src="./extras/modernizr.2.5.3.min.js"></script>
 	<script type="text/javascript" src="./extras/particles.js"></script>
+	<script type="text/javascript" src="./js/vue.js"></script>
 	<script type="text/javascript" src="./js/turn.js"></script>
 	<title>中环五金</title>
 	<link rel="icon" href="./icon/logo.png"/>
 </head>
 <body>
 	<div id="particles-js"></div>
-	<div class="flipbook-viewport">
+	<div id="app" class="flipbook-viewport">
 		<div class="header"></div>
 		<div class="container">
 			<div class="category">
 				<label for="category-select">类目：</label>
-				<select id="category-select" class="category-select">
+				<select id="category-select" class="category-select" v-model="selectCatagory" @change="cataChange">
+					<option v-for="(item, index) in data" :value="''+ index" :key="index"> {{item.category}}</option>
 				</select>
 			</div>
-			<div class="left"></div>
-			<div class="right"></div>
-			<div class="container-content">		
-				<div class="flipbook"></div>
+			<div class="left" @click="previous"></div>
+			<div class="right" @click="next"></div>
+			<div class="container-content">	
+				<div class="flipbook" ref="flipbook">
+					<div
+					 v-for="(goods, index) in allGoods" 
+					 class="flipbook-item" 
+					 :style="{backgroundImage:`url(pages/${goods.image[0]})`}"
+					 :key="index"></div>
+				</div>
 			</div>
-			<div class="goods-title"></div>
+			<div class="goods-title" @click="goDetail">{{goodsTitle}}</div>
 		</div>
 		<div class="footer">
 			<div class="pages-wrap">
-				<span class="previous"></span>
+				<span class="previous" @click="turnFirst"></span>
 				<div class="pages-content">
-					<span class="count">1</span>/<span class="pages"></span>
+					<span class="count">{{currentPage}}</span>/<span class="pages">{{pages}}</span>
 				</div>		
-				<span class="next"></span>
+				<span class="next" @click="turnLast"></span>
 			</div>
 		</div>
 	</div>
